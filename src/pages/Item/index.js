@@ -8,7 +8,26 @@ import ellipse from "../../assests/Ellipse.png"
 import metadata from "../../assests/metadata.png"
 import ipfs from "../../assests/ipfs.png"
 import NftHistory from './nft-history';
+import { HttpProvider} from '@harmony-js/network'
+import { PrivateKey,HRC721  } from 'harmony-marketplace-sdk'
+import marketPlaceAbi from "../../ContractABI/marketplaceAbi.json"
+import { AccountState,PkState } from '../../recoilstate/globalState'
+import { useRecoilValue } from 'recoil'
+
+const { Units, Unit ,toWei} = require('@harmony-js/utils');
+
+export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
+export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
+
 export default function Item() {
+
+    
+   const privateKey =useRecoilValue(PkState)
+   const account=useRecoilValue(AccountState)
+   const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
+
+   console.log(pk)
+ 
     const location =useLocation()
     const [locationState,setlocationState] = useState(location.state)
   

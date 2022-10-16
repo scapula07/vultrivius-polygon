@@ -10,9 +10,10 @@ import Web3 from "web3";
 import erc721V3xAbi from "../../ContractABI/v3xcollectionAbi.json"
 import Modal from '../../components/Modal'
 import {AiOutlineCloseCircle } from "react-icons/ai"
+const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
-export const marketplace_contract_Address="0xdEa8ed1C1Fc91Fbd4391a55e294C33De6afF702a"
-
+export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
+export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
 
 
 export default function CreateNft() {
@@ -20,13 +21,10 @@ export default function CreateNft() {
     const web3 = new Web3(window.ethereum)
     const privateKey =useRecoilValue(PkState)
     const account=useRecoilValue(AccountState)
-    const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey)
+    const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
 
-    
-    const marketPlaceContract = new web3.eth.Contract(
-      marketPlaceAbi,
-      marketplace_contract_Address
-   )
+    console.log(pk)
+  
     const [fileImage, setFileImage] = useState({
       src: "",
       alt: "upload an image",
@@ -35,24 +33,69 @@ export default function CreateNft() {
   const [itemName,setName]=useState("")
   const [collectionName,setCName]=useState("")
   const [price,setPrice]=useState("")
-  const [contractAddress,setAddress]=useState("")
+  const [contractAddress,setAddress]=useState("0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5")
   const [itemDescription,setDescription]=useState("")
   const [trigger,setTrigger] =useState(false)
   const [supply,setSupply] =useState("")
+  const [Royalty,setRoyalty] =useState("")
  
+  const options={
+    gasPrice:new Unit("100").asGwei().toWei(),
+    gasLimit:3500000
+  }
+  const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
+  const NftCollectionContract = new HRC721(contractAddress,erc721V3xAbi,pk)
+  
+  const marketPlaceContract = new web3.eth.Contract(
+   erc721V3xAbi,
+   contractAddress
+)
   const listNft=async()=>{
+     const id =Number(tokenid)
+     const itemPrice=Number(price)
+     const fee =Number(Royalty)
+    try{
+       
+       const tx = await NftMarketplaceContract.send("makeItem", [contractAddress,id,itemPrice],
+       {
+         gasPrice:new Unit("100").asGwei().toWei(),
+         gasLimit:3500000,
+         value: toWei(fee, 'one')
+       }
+      
+       )
+   
+     console.log(tx,"ttttttttt")
+      }catch(e){
+       console.log(e)
+       }   
+
 
   }
 
   const mintNftItem =async()=>{
+   
+    const amount =Number(supply)
+    console.log(amount,"aaaa")
 
-   const NftCollectionContract = new HRC721(marketplace_contract_Address,erc721V3xAbi,pk)
-  
+    
+    try{
+      
+      const tx = await NftCollectionContract.send("mintNft", [account,amount],options )
+     
+      console.log(tx,"ttttttttt")
+      }catch(e){
+      console.log(e)
+      }   
+
+
+   
    
 
    }
 
-    console.log(marketPlaceContract,"mmmmmm")
+   //  console.log(NftCollectionContract,"mmmmmm")
+    console.log(contractAddress,"addresss")
   return (
        <>
         <div className='pt-20 px-28'>
@@ -122,10 +165,19 @@ export default function CreateNft() {
           </div>
 
           <div className='flex flex-col space-y-2 pt-8'>
+             <label className="text-slate-400">Royalty Fee</label>
+             <input 
+               className='input-color py-2 text-slate-600 px-4 rounded-sm  outline-none' 
+                placeholder='Set Amount (ONE)'
+
+             />
+          </div>
+
+          <div className='flex flex-col space-y-2 pt-8'>
              <label className="text-slate-400">Buy Now price</label>
              <input 
                className='input-color py-2 text-slate-600 px-4 rounded-sm  outline-none' 
-                placeholder='Enter Amount in ONE or VNE'
+                placeholder='Enter Amount(ONE)'
                 onChange={(e)=>setPrice(e.target.value)}
              />
           </div>
@@ -138,7 +190,9 @@ export default function CreateNft() {
          
        </main>
        <main className='pt-6 pb-20'>
-       <button className='btn-color text-black text-sm w-full py-2 rounded-md '>List item</button>
+       <button className='btn-color text-black text-sm w-full py-2 rounded-md '
+        onClick={listNft}
+       >List item</button>
       
        </main>
           
@@ -152,6 +206,7 @@ export default function CreateNft() {
             
              <input className='stake-bg w-full text-xs px-4 py-1 outline-none'
               placeholder='Supply* '
+              onChange={(e)=>setSupply(e.target.value)}
              />
           </main>
           <main className='pt-10'>
