@@ -13,6 +13,8 @@ import UserCollections from "./pages/Profile/collections";
 import Transactions from "./pages/Profile/transactions";
 import Owned from "./pages/Profile/owned";
 import Goverance from "./pages/Goverance";
+import Wallet from "./pages/Profile/wallet";
+import Bridge from "./pages/BridgePage";
 function App() {
   return (
     <div className="App">
@@ -29,7 +31,9 @@ function App() {
             <Route exact path="collections" element={<UserCollections />} />
             <Route exact path="transactions" element={<Transactions />} />
             <Route exact path="owned" element={<Owned />} />
+            <Route exact path="wallet" element={<Wallet />} />
           </Route>
+          <Route exact path="/bridge" element={<Bridge />} />
         </Routes>
       </Layout>
     </div>

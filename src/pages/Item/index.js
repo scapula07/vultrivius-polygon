@@ -13,7 +13,9 @@ import { PrivateKey,HRC721  } from 'harmony-marketplace-sdk'
 import marketPlaceAbi from "../../ContractABI/marketplaceAbi.json"
 import { AccountState,PkState } from '../../recoilstate/globalState'
 import { useRecoilValue } from 'recoil'
-
+import Modal from '../../components/Modal';
+import Checker from "../../assests/checker.png"
+import {AiOutlineCloseCircle } from "react-icons/ai"
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
 export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
@@ -30,8 +32,11 @@ export default function Item() {
  
     const location =useLocation()
     const [locationState,setlocationState] = useState(location.state)
-  
+    const [trigger,setTrigger] =useState(false)
+    const [purchase,setPurchased] =useState(true)
+    const [token,setToken]=useState("")
   return (
+   <>
     <div className='pt-24'>
         <div className='flex w-full'>
            <main className='w-1/4 flex justify-center'>
@@ -60,7 +65,9 @@ export default function Item() {
 
              </div>
              <div className='flex space-x-4 pt-8'>
-                <button className='btn-color text-black text-xs w-24 py-1'>Buy Now</button>
+                <button className='btn-color text-black text-xs w-24 py-1'
+                 onClick={()=>setTrigger(true)}
+                >Buy Now</button>
                 <button className='flex items-center w-32 py-1 rounded-full border border-slate-800 justify-center text-xs space-x-1'><img src={ellipse} className="w-2 w-2"/> <span>View AR</span></button>
 
              </div>
@@ -103,5 +110,62 @@ export default function Item() {
         </div>
          
     </div>
+
+    <Modal trigger={trigger} cname="h-56 w-1/3 shadow rounded-lg py-4 px-8">
+        <main className='flex justify-end'>
+           <button onClick={()=>setTrigger(false)}><AiOutlineCloseCircle className="text-md" /></button>
+         </main>
+         {purchase===false&&
+          <>
+         <div className='flex flex-col pt-4'>
+            <main className="flex text-slate-400 text-xs justify-between w-full items-center ">
+               <h5>Item</h5>
+               <h5>Total</h5>
+            </main>
+            <main className='stake-bg px-4 py-4 flex justify-between w-full items-center mt-2' >
+               <div className='flex items-center space-x-2'>
+                  <img src={locationState.item?.imgUrl} className="w-12 h-12 rounded-md"/>
+                  <h5 className='flex flex-col text-xs'>
+                     <span className='text-slate-400'>{locationState.item?.title}</span>
+                     <span className='font-semibold'>{`${locationState.item?.title} #1`}</span>
+                     <span className='text-slate-400'>Royalty Fee :{"0.1 ONE"}</span>
+                  </h5>
+               </div>
+
+               <div>
+                 <h5 className='flex items-center space-x-1 text-xs'><img src={harmony } className="w-4  h-4"/> <span>{locationState.item?.price}</span></h5> 
+                 <h5 className='text-xs text-slate-400'>{locationState.item?.price *4 } V3T</h5>
+               </div>
+              
+            </main>
+  
+           </div>
+
+           <main className='w-full pt-4 '>
+             <button className='btn-color rounded-md w-full text-black py-1 flex justify-center space-x-4 items-center '>
+               <span>Complete purchase</span>
+               <select name="cars" id="cars" className='text-xs text-slate-600 btn-color outline-none'
+                 onChange={(e)=>setToken(e.target.value)}
+               >
+                  <option value="one" className='stake-bg outline-none'>ONE</option>
+                  <option value="v3t" className='stake-bg outline-none'>V3T</option>
+               </select>  
+            </button>
+               
+           </main>
+           </>
+         }
+
+         {purchase===true&&
+            <div>
+               <img src={Checker } className=""/>
+                <main>
+                   <button>View NFT</button>
+                   <button>Cancel</button>
+                </main>
+            </div>
+         }
+    </Modal>
+    </>
   )
 }
