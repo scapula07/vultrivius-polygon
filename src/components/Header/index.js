@@ -18,6 +18,7 @@ export default function Header() {
                         <Link to="/"><h5>Explore</h5></Link>
                        <Link to="/stake"><h5>Stake</h5></Link> 
                        <Link to="list"><h5>Create</h5></Link>  
+                       <Link to="bridge"><h5>Bridge</h5></Link>  
                      </main>
                      <ConnectAccount />
                   </nav>
