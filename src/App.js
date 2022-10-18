@@ -13,6 +13,7 @@ import UserCollections from "./pages/Profile/collections";
 import Transactions from "./pages/Profile/transactions";
 import Owned from "./pages/Profile/owned";
 import Goverance from "./pages/Goverance";
+import Rapture from "./pages/Rapture";
 function App() {
   return (
     <div className="App">
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/item/:name" element={<Item />} />
+          <Route exact path="/rapture" element={<Rapture />} />
           <Route exact path="/list" element={<CreateNft />} />
           <Route exact path="/stake" element={<Staking />} />
           <Route exact path="/createpool" element={<CreateStake />} />
