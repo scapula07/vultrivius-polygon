@@ -97,7 +97,7 @@ const Rapture = () => {
                     </p>
 
                     <div className="mt-10 md:mt-[66px]">
-                        <img src={sofiah} alt="" />
+                        <img src={sofiah} alt=""  className='w-full'/>
                     </div>
                 </header>
 
