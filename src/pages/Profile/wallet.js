@@ -1,12 +1,39 @@
 import { type } from "os-browserify"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import { getWalletBalance } from "../../api";
 import sendIcon from "../../assests/icon/arrow-right-up.png"
 import receiveIcon from "../../assests/icon/receive.png"
 import AddFundsModal from "../../components/modals/add-funds-modal"
+import { AccountState, PkState } from "../../recoilstate/globalState";
+
+const { Harmony } = require('@harmony-js/core');
+const {
+  ChainID,
+  ChainType,
+  hexToNumber,
+  numberToHex,
+  fromWei,
+  Units,
+  Unit,
+} = require('@harmony-js/utils');
+
+const hmy = new Harmony(
+    'https://api.s0.b.hmny.io/',
+    {
+        chainType: ChainType.Harmony,
+        chainId: ChainID.HmyTestnet,
+    },
+);
 
 export default function Wallet() {
+const account = useRecoilValue(AccountState)
+const privatek=useRecoilValue(PkState)
+const [balance, setBalance] = useState(null);
+// console.log('privatek',privatek)
 
-  const [trigger, setTrigger] = useState(true);
+
+  const [trigger, setTrigger] = useState(false);
   const transactions = [
     {
       type: 'send',
@@ -21,13 +48,33 @@ export default function Wallet() {
   ]
 
   const handleShowAddFundsModal = () => setTrigger(true)
+// console.log('wallet address',getWalletBalance('one1tsfdk8spd04pntkk0sf9m3dsxm3exgxtn0dv7w'))
+
+
+// const account = new Account(
+//   '45e497bd45a9049bcb649016594489ac67b9f052a6cdf5cb74ee2427a60bf25e',
+//   new Messenger(
+//     new HttpProvider('https://api.s0.b.hmny.io'),
+//     ChainType.Harmony,
+//     ChainID.HmyTestnet,
+//   ),
+// );
+useEffect(() => {
+  hmy.blockchain
+  .getBalance({ address: account})
+  .then((response) => {
+    setBalance(fromWei(hexToNumber(response.result), Units.one))
+  });
+}, [account])
+
+
   return (
     <section>
       <AddFundsModal {...{ trigger, setTrigger }} />
       <div className='pt-4  text-white flex justify-center'>
         <div className='stake-bg flex w-1/2 items-center rounded-lg flex-col py-8'>
           <h5 className='text-slate-400'>Total Balance</h5>
-          <h5 className='text-lg font-semibold'>{"0.0 V3T"}</h5>
+          <h5 className='text-lg font-semibold'>{balance} ONE</h5>
 
           <div className='flex items-center justify-center space-x-6 pt-4'>
             <button onClick={handleShowAddFundsModal} className='btn-color rounded-sm text-black px-2 py-1 text-xs font-semibold'>Add funds</button>
