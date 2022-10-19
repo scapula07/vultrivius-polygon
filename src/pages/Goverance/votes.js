@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import Hero from "./hero";
 import VotesBreakdown from "./votesBreakdown";
 import NftHistory from "./nftHistory";
+import NftVote from "./nftVote";
 import "./goverance.css"
 
 // images
 import clock from "../../assests/goverance/clock.svg";
-import NftVote from "./nftVote";
 
 const Votes = () => {
   const [showDetails, setShowDetails] = useState(false);
