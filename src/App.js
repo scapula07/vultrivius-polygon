@@ -17,10 +17,12 @@ import Rapture from "./pages/Rapture";
 
 import Wallet from "./pages/Profile/wallet";
 import Bridge from "./pages/BridgePage";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <div className="App">
+      <Toaster />
       <Layout>
         <Routes>
           <Route exact path="/" element={<Home />} />
