@@ -8,6 +8,7 @@ import { AccountState,  PkState} from '../../recoilstate/globalState'
 import { useRecoilState } from 'recoil'
 import Avater from "../../assests/profileAvater.png"
 import { Link } from 'react-router-dom'
+
 export default function ConnectAccount() {
     const [trigger,setTrigger] =useState(false)
     const [Wallet,setWallet]=useState("")
@@ -42,7 +43,7 @@ export default function ConnectAccount() {
             <button className='py-1 px-4 text-xs flex items-center space-x-2 text-white stake-bg border border-slate-400 rounded-full hover:btn-color hover:border-0'
             
              >
-            <img src={Avater} className/>
+            <img src={Avater} alt="" />
            <span>{ account.slice(0,9)+"..."}</span>
            </button>
        </Link>
@@ -63,7 +64,7 @@ export default function ConnectAccount() {
                     {Wallet===""&&
                     <>
                    <div className='flex  space-x-2 items-center wallet-bg py-4 px-4 rounded-sm'>
-                    <img src={metamaskImg} className="" />
+                    <img src={metamaskImg} className="" alt='' />
                     <main>
                         <h5 className='font-semibold text-sm text-slate-300'>Metamask</h5>
                         <p className='text-xs text-slate-700'>The popular crypto wallet is secure and flexible</p>
@@ -74,7 +75,7 @@ export default function ConnectAccount() {
                      onClick={()=>setWallet("otherWallets")}
                     >
                     <h5 className='bg-white'>
-                     <img src="https://algorand-governance-platform-web.s3.amazonaws.com/static/media/Other.eac2bef4.svg" className=''/>
+                     <img src="https://algorand-governance-platform-web.s3.amazonaws.com/static/media/Other.eac2bef4.svg" alt='' className=''/>
                     </h5>
                     <main>
                       <h5 className='font-semibold text-sm text-slate-300'>Other wallets</h5>
