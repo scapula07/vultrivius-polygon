@@ -39,7 +39,7 @@ Give a ⭐ if you like this project!
 
 [contributors-shield]: https://img.shields.io/github/contributors/scapula07/Vutrivius-harmony-hack?style=for-the-badge
 [contributors-url]: https://github.com/scapula07/Vutrivius-harmony-hack/graphs/contributors
-[issues-shield]: https://img.shields.io/github/issues/scapula07/Vutrivius-harmony-hack
+[issues-shield]: https://img.shields.io/github/issues/scapula07/Vutrivius-harmony-hack?style=for-the-badge
 [issues-url]: https://github.com/scapula07/Vutrivius-harmony-hack/issues
 [forks-shield]: https://img.shields.io/github/forks/scapula07/Vutrivius-harmony-hack?style=for-the-badge
 [forks-url]: https://github.com/scapula07/Vutrivius-harmony-hack/network
