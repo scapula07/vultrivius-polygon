@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![](https://img.shields.io/badge/Hackathon-blueviolet)
 
-## Available Scripts
+[![Contributors][contributors-shield]][contributors-url]
+[![GitHub issues][issues-shield]][issues-url]
+[![GitHub forks][forks-shield]][forks-url]
+[![GitHub stars][star-shield]][star-url]
+[![GitHub license][license-shield]][license-url]
 
-In the project directory, you can run:
 
-### `npm start`
+### Install
+```bash
+git clone https://github.com/scapula07/Vutrivius-harmony-hack.git
+cd Vutrivius-harmony-hack
+yarn install
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+#Get your development server running.
+yarn start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🤝 Contributing
 
-### `npm test`
+Contributions, issues, and feature requests are welcome!
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Feel free to check the [issues page](../../issues/).
 
-### `npm run build`
+## Show your support
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Give a ⭐ if you like this project!
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[contributors-shield]: https://img.shields.io/github/contributors/scapula07/Vutrivius-harmony-hack?style=for-the-badge
+[contributors-url]: https://github.com/scapula07/Vutrivius-harmony-hack/graphs/contributors
+[issues-shield]: https://img.shields.io/github/issues/scapula07/Vutrivius-harmony-hack
+[issues-url]: https://github.com/scapula07/Vutrivius-harmony-hack/issues
+[forks-shield]: https://img.shields.io/github/forks/scapula07/Vutrivius-harmony-hack?style=for-the-badge
+[forks-url]: https://github.com/scapula07/Vutrivius-harmony-hack/network
+[star-shield]: https://img.shields.io/github/stars/scapula07/Vutrivius-harmony-hack?style=for-the-badge
+[star-url]: https://github.com/scapula07/Vutrivius-harmony-hack/stargazers
+[license-shield]: https://img.shields.io/github/license/scapula07/Vutrivius-harmony-hack?style=for-the-badge
+[license-url]: hhttps://github.com/scapula07/Vutrivius-harmony-hack/blob/master/License
