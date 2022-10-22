@@ -15,8 +15,8 @@ import { collection, setDoc,doc,getDoc,addDoc} from  'firebase/firestore'
 import { db } from '../../firebase';
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
-export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
-export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
+export const marketplace_contract_Address="0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
+export const collection_contract_Address="0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
 
 
 export default function CreateNft() {
@@ -36,7 +36,7 @@ export default function CreateNft() {
   const [itemName,setName]=useState("")
   const [collectionName,setCName]=useState("")
   const [price,setPrice]=useState("")
-  const [contractAddress,setAddress]=useState("0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5")
+  const [contractAddress,setAddress]=useState("0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a")
   const [itemDescription,setDescription]=useState("")
   const [trigger,setTrigger] =useState(false)
   const [supply,setSupply] =useState("")

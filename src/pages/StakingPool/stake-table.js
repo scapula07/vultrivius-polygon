@@ -13,7 +13,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Link } from 'react-router-dom'
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
-export const staking_contract_Address ="0x1Ce0fD6bB86bB8F55aa5663b01D550fCB17099c9"
+export const staking_contract_Address ="0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"
 
 export default function StakeTable() {
     const [pool,setPool]=useState([])

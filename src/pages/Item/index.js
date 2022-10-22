@@ -16,13 +16,14 @@ import { useRecoilValue } from 'recoil'
 import erc721V3xAbi from "../../ContractABI/v3xcollectionAbi.json"
 import Modal from '../../components/Modal';
 import Checker from "../../assests/checker.png"
+import toast, { Toaster } from 'react-hot-toast';
 import {AiOutlineCloseCircle } from "react-icons/ai"
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
 
 
-export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
-export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
+export const marketplace_contract_Address="0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
+export const collection_contract_Address="0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
 
 export default function Item() {
 
@@ -51,7 +52,7 @@ export default function Item() {
           console.log("one")
           try{
        
-            const tx = await NftMarketplaceContract.send("purchaseItem", [1],
+            const tx = await NftMarketplaceContract.send("purchaseItemWithONE", [1],
             {
               gasPrice:new Unit("100").asGwei().toWei(),
               gasLimit:3500000,
@@ -69,22 +70,26 @@ export default function Item() {
      
        }else{
          console.log("v3t")
-         setToken("")
-         // try{
-       
-         //    const tx = await NftMarketplaceContract.send("purchaseItem", [],
-         //    {
-         //      gasPrice:new Unit("100").asGwei().toWei(),
-         //      gasLimit:3500000,
-         //      value: toWei(fee, 'one')
-         //    }
-           
-         //    )
+         
+         try{
+            const feeOne =Number(locationState.item?.price)*4
+            const tx = await NftMarketplaceContract.send("purchaseItemWithToken", [1,feeOne ,"0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"],
+            {
+              gasPrice:new Unit("100").asGwei().toWei(),
+              gasLimit:3500000,
+             
+            }
+            
+            )
         
-         //  console.log(tx,"ttttttttt")
-         //   }catch(e){
-         //    console.log(e)
-         //    }   
+          console.log(tx,"ttttttttt")
+          toast(`Transaction successful
+          Transaction Hash: ${tx.receipt?.transactionHash}
+           `)
+          setToken("")
+           }catch(e){
+            console.log(e)
+            }   
      
        }
     }
