@@ -13,10 +13,13 @@ import { PrivateKey,HRC721  } from 'harmony-marketplace-sdk'
 import marketPlaceAbi from "../../ContractABI/marketplaceAbi.json"
 import { AccountState,PkState } from '../../recoilstate/globalState'
 import { useRecoilValue } from 'recoil'
+import erc721V3xAbi from "../../ContractABI/v3xcollectionAbi.json"
 import Modal from '../../components/Modal';
 import Checker from "../../assests/checker.png"
 import {AiOutlineCloseCircle } from "react-icons/ai"
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
+
+
 
 export const marketplace_contract_Address="0x052846593585a705c40278C0c1D096926d888217"
 export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
@@ -35,6 +38,56 @@ export default function Item() {
     const [trigger,setTrigger] =useState(false)
     const [purchase,setPurchased] =useState(true)
     const [token,setToken]=useState("")
+
+    const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
+   
+    
+
+    const purchaseItem=async()=>{
+      console.log(token)
+      if (token ==="") return  console.log("empty")
+      const feeOne =Number(locationState.item?.price)
+       if(token=="one"){
+          console.log("one")
+          try{
+       
+            const tx = await NftMarketplaceContract.send("purchaseItem", [1],
+            {
+              gasPrice:new Unit("100").asGwei().toWei(),
+              gasLimit:3500000,
+              value: toWei(feeOne, 'one')
+            }
+           
+            )
+           
+          console.log(tx,"ttttttttt")
+          setToken("")
+          setPurchased(true)
+           }catch(e){
+            console.log(e)
+            }   
+     
+       }else{
+         console.log("v3t")
+         setToken("")
+         // try{
+       
+         //    const tx = await NftMarketplaceContract.send("purchaseItem", [],
+         //    {
+         //      gasPrice:new Unit("100").asGwei().toWei(),
+         //      gasLimit:3500000,
+         //      value: toWei(fee, 'one')
+         //    }
+           
+         //    )
+        
+         //  console.log(tx,"ttttttttt")
+         //   }catch(e){
+         //    console.log(e)
+         //    }   
+     
+       }
+    }
   return (
    <>
     <div className='pt-24'>
@@ -142,7 +195,9 @@ export default function Item() {
            </div>
 
            <main className='w-full pt-4 '>
-             <button className='btn-color rounded-md w-full text-black py-1 flex justify-center space-x-4 items-center '>
+             <button className='btn-color rounded-md w-full text-black py-1 flex justify-center space-x-4 items-center '
+               onClick={purchaseItem}
+             >
                <span>Complete purchase</span>
                <select name="cars" id="cars" className='text-xs text-slate-600 btn-color outline-none'
                  onChange={(e)=>setToken(e.target.value)}
@@ -157,11 +212,12 @@ export default function Item() {
          }
 
          {purchase===true&&
-            <div>
-               <img src={Checker } className=""/>
-                <main>
-                   <button>View NFT</button>
-                   <button>Cancel</button>
+            <div className='flex flex-col items-center'>
+               <h5 className='stake-bg rounded-full w-12 h-12 flex justify-center items-center'><img src={Checker } className="w-10 h-10"/></h5>
+                <h5>Purchase Successful</h5>
+                <main className='flex flex-col pt-4 space-y-2 w-full px-6'>
+                   <button className="btn-color w-full rounded-lg py-1 text-black ">View NFT</button>
+                   <button className=''>Cancel</button>
                 </main>
             </div>
          }

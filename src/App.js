@@ -15,6 +15,8 @@ import Owned from "./pages/Profile/owned";
 import Goverance from "./pages/Goverance";
 import Wallet from "./pages/Profile/wallet";
 import Bridge from "./pages/BridgePage";
+import VRpage from "./pages/VRPage";
+
 function App() {
   return (
     <div className="App">
@@ -24,7 +26,7 @@ function App() {
           <Route exact path="/item/:name" element={<Item />} />
           <Route exact path="/list" element={<CreateNft />} />
           <Route exact path="/stake" element={<Staking />} />
-          <Route exact path="/createpool" element={<CreateStake />} />
+          <Route exact path="/pool" element={<CreateStake />} />
           <Route exact path="/votes" element={<Goverance />} />
           <Route exact path="/profile" element={<Profile />}>
             <Route exact path="created" element={<Created />} />
@@ -34,7 +36,9 @@ function App() {
             <Route exact path="wallet" element={<Wallet />} />
           </Route>
           <Route exact path="/bridge" element={<Bridge />} />
+          <Route exact path="/governace" element={<Goverance/>} />
         </Routes>
+        
       </Layout>
     </div>
   );

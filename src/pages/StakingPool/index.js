@@ -2,6 +2,7 @@ import React from 'react'
 import StakeTable from './stake-table'
 import "./stake.css"
 import {FiSearch} from "react-icons/fi"
+import {Link} from "react-router-dom"
 
 export default function Staking() {
   return (
@@ -15,7 +16,7 @@ export default function Staking() {
                 </p>
              </main>
              <main className='px-10'>
-                <button className='btn-color text-black text-sm py-2 px-4 font-semibold rounded-sm'>Create pool</button>
+             <Link to="/pool" ><button className='btn-color text-black text-sm py-2 px-4 font-semibold rounded-sm'>Create pool</button></Link>
              </main>
            </div>
         </div>
