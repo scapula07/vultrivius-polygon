@@ -20,7 +20,7 @@ export default function Profile() {
          <div className='flex w-full px-6 items-center justify-between'>
              <main className='flex flex-col space-y-2'>
                 <h5 className='text-xl font-semibold'>Unnamed</h5>
-                <h5 className='rounded-full px-2 py-1 text-xs  w-1/6 stake-bg '>{locationState.account.slice(0,9)+"..."}</h5>
+                <h5 className='rounded-full px-2 py-1 text-xs  w-1/6 stake-bg '>{locationState?.account?.slice(0,9)+"..."}</h5>
                 <p className='text-xs'>
                    I am a New Zealand artist based in Wanaka.
                 <br></br>

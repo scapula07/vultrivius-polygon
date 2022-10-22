@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@harmony-js/account": "^0.1.57",
     "@harmony-js/utils": "^0.1.56",
     "@metamask/detect-provider": "^2.0.0",
     "@react-three/drei": "^9.36.0",
@@ -40,7 +41,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-scripts build",
+    "build": "react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

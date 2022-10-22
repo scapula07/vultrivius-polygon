@@ -32,8 +32,8 @@ export default function Collections() {
 
      <div className="mt-5 lg:mt-[33px] space-y-10 md:space-y-0 md:gap-5 lg:gap-6 md:grid grid-cols-2 lg:grid-cols-3">
        {
-        collectionNft.map((item)=>
-        <Link to={`/item/${item.title}`}
+        collectionNft.map((item,index)=>
+        <Link key={index } to={`/item/${item.title}`}
                 state={{
                  item
                    }}

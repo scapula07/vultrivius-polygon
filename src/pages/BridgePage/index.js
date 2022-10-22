@@ -1,7 +1,7 @@
 import React ,{useState} from 'react'
 import {FaEthereum} from "react-icons/fa"
 import harmony from "../../assests/harmony.png"
-
+import { ethers } from 'ethers';
 import erc721V3xAbi from "../../ContractABI/v3xcollectionAbi.json"
 import Web3Modal from 'web3modal'
 import Web3 from 'web3'
@@ -21,7 +21,23 @@ export default function Bridge() {
     const [sourceCustody, getSourceCustody] = useState([]);
     const [selected, setSelected] = useState("Set Network");
     const [chain,setChain]=useState("")
+   
+  const [id, getId] = useState(0);
+  const [customPay, useToken] = React.useState(true);
+  const [nfts, setNfts] = useState([]);
+    const [sourceRpc, getSourceRpc] = useState([]);
+  const [confirmLink, getConfirmLink] = useState([]);
+  const [visible, setVisible] = React.useState(false);
+  const handler = () => setVisible(true);
+  const closeHandler = () => {
+    setVisible(false);
+    console.log("closed");
+  };
 
+  const [erc20Contract, getErc20] = useState([]);
+  const [destselected, setDestSelected] = React.useState(new Set(["Set Destination"]));
+  const destChain = React.useMemo(() => Array.from(destselected).join(", ").replaceAll("_", " "),[selected])
+  
     var web3 = null;
     async function sourceChain() {
        
@@ -51,6 +67,59 @@ export default function Bridge() {
         var eth = "0x5";
         var harmony = "1666700000";
         const connected = await detectEthereumProvider();
+
+        if (connected.chainId == eth) {
+            var sNft = ethNFT
+            var sCustody = ethCustody
+            var sRpc = ethrpc
+            // var erc20 = goeErc20
+          }
+          else {
+            var sNft =  harBridgeNFT
+            var sCustody = harCustody
+            var sRpc = harrpc
+            // var erc20 = mumErc20
+          }
+          const providerEther = new ethers.providers.JsonRpcProvider(sRpc)
+          const wallet = new ethers.Wallet(privateKey , providerEther );
+          const contract = new ethers.Contract(sNft, erc721V3xAbi , wallet);
+          const itemArray = [];
+          await contract.walletOfOwner(account).then((value => {
+            value.forEach(async(id) => {
+                let token = parseInt(id, 16)             
+                  const rawUri = contract.tokenURI(token)
+                  const Uri = Promise.resolve(rawUri)
+                  const getUri = Uri.then(value => {
+                    let str = value
+                    let cleanUri = str.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                    let metadata = fetch(cleanUri).catch(function (error) {
+                      console.log(error.toJSON());
+                    });
+                    return metadata;
+                  })
+                  getUri.then(value => {
+                    let rawImg = value.data.image
+                    var name = value.data.name
+                    var desc = value.data.description
+                    let image = rawImg.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                      let meta = {
+                        name: name,
+                        img: image,
+                        tokenId: token,
+                        wallet: account,
+                        desc
+                      }
+                      itemArray.push(meta)
+                    })
+                  })
+                  }))
+
+                  await new Promise(r => setTimeout(r, 2000));
+                  console.log("Wallet Refreshed : " + sRpc)
+                  getSourceNft(sNft);
+                  getSourceCustody(sCustody);
+                  getSourceRpc(sRpc);
+                  setNfts(itemArray);
       }
     
   return (
