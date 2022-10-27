@@ -41,6 +41,10 @@ export default function Item() {
     const [trigger,setTrigger] =useState(false)
     const [purchase,setPurchased] =useState(true)
     const [token,setToken]=useState("")
+    
+    const web3 = new Web3(window.ethereum)
+    
+    
 
     const marketPlaceContract = new web3.eth.Contract(
       marketPlaceAbi,
