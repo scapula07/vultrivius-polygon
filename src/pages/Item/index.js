@@ -18,6 +18,8 @@ import Modal from '../../components/Modal';
 import Checker from "../../assests/checker.png"
 import toast, { Toaster } from 'react-hot-toast';
 import {AiOutlineCloseCircle } from "react-icons/ai"
+import Web3 from "web3";
+
 const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
 
@@ -40,7 +42,10 @@ export default function Item() {
     const [purchase,setPurchased] =useState(true)
     const [token,setToken]=useState("")
 
-    const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
+    const marketPlaceContract = new web3.eth.Contract(
+      marketPlaceAbi,
+      marketplace_contract_Address
+     )
    
     
 
@@ -52,14 +57,8 @@ export default function Item() {
           console.log("one")
           try{
        
-            const tx = await NftMarketplaceContract.send("purchaseItemWithONE", [1],
-            {
-              gasPrice:new Unit("100").asGwei().toWei(),
-              gasLimit:3500000,
-              value: toWei(feeOne, 'one')
-            }
-           
-            )
+       const tx = await marketPlaceContract.methods.purchaseItemWithONE(1).send({from:account})
+            
            
           console.log(tx,"ttttttttt")
           setToken("")
@@ -73,18 +72,12 @@ export default function Item() {
          
          try{
             const feeOne =Number(locationState.item?.price)*4
-            const tx = await NftMarketplaceContract.send("purchaseItemWithToken", [1,feeOne ,"0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"],
-            {
-              gasPrice:new Unit("100").asGwei().toWei(),
-              gasLimit:3500000,
-             
-            }
-            
-            )
+            const tx =await marketPlaceContract.methods.purchaseItemWithONE(1,feeOne ,"0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F").send({from:account})
+        
         
           console.log(tx,"ttttttttt")
           toast(`Transaction successful
-          Transaction Hash: ${tx.receipt?.transactionHash}
+          Transaction Hash: ${tx.transactionHash}
            `)
           setToken("")
            }catch(e){
