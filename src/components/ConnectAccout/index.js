@@ -1,4 +1,4 @@
-import React ,{useState} from 'react'
+import React,{useState,useCallback,useEffect } from 'react'
 import "./connect.css"
 import Modal from '../Modal'
 import {AiOutlineCloseCircle} from "react-icons/ai"
@@ -8,22 +8,69 @@ import { AccountState,  PkState} from '../../recoilstate/globalState'
 import { useRecoilState } from 'recoil'
 import Avater from "../../assests/profileAvater.png"
 import { Link } from 'react-router-dom'
+import detectEthereumProvider from "@metamask/detect-provider"
+import Web3 from "web3";
 
 export default function ConnectAccount() {
     const [trigger,setTrigger] =useState(false)
-    const [Wallet,setWallet]=useState("")
     const [privatek,setPk]=useRecoilState(PkState)
-    const [account,setAccount]=useRecoilState(AccountState)
+    const [account,setAccount]=useRecoilState(AccountState)   
+    
+   const web3loader = useCallback(
+      async() => {
+  
+       const webProvider = await detectEthereumProvider();
+  
+      // console.log(webProvider)
+          if(webProvider){
+            const chainId = await window.ethereum?.request({ method: 'eth_chainId' });
+         console.log(chainId)
+       
+  
+      const accounts = await window.ethereum?.request({ method: 'eth_accounts' })
+          handleAccountsChanged(accounts)
+        }
+    }
+    , [])
+    useEffect(()=>{
+        window.addEventListener('load', web3loader)
+        window.ethereum?.on('accountsChanged', handleAccountsChanged);
+    
+        return () => {
+          web3loader()
+        }
+        },[web3loader])
+
+    function handleAccountsChanged(accounts) {
+            //window.location.reload();
+           }
+    
+    
+    
+    
 
     console.log(privatek)
+    
      const connectWallet=async()=>{
        
-        const res=await connectHarmony(privatek)
-        console.log(res?.defaultSigner,"harmonney key")
-        setAccount(res?.defaultSigner)
-        setWallet("")
-        setTrigger(false)
+         try{
+    
+            const accounts = await window.ethereum?.request({method: 'eth_requestAccounts'  })
+              // console.log(accounts[0])
+              setAccount(accounts[0])
+            
+            }catch(error){
+              if(error.code === 4001) {
+                 // EIP-1193 userRejectedRequest error
+                 // If this happens, the user rejected the connection request.
+                //  console.log('metamask did not connect');
+               } else {
+                 console.error(error);
+              }
+          }
       }
+     
+     
   return (
     <>   
     {account?.length===0&&
@@ -63,7 +110,9 @@ export default function ConnectAccount() {
                 <main className='flex flex-col space-y-4 pt-4'>
                     {Wallet===""&&
                     <>
-                   <div className='flex  space-x-2 items-center wallet-bg py-4 px-4 rounded-sm'>
+                   <div className='flex  space-x-2 items-center wallet-bg py-4 px-4 rounded-sm'
+                       onClick={connectWallet}
+                     >
                     <img src={metamaskImg} className="" alt='' />
                     <main>
                         <h5 className='font-semibold text-sm text-slate-300'>Metamask</h5>
