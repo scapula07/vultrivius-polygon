@@ -24,7 +24,7 @@ export default function CreateNft() {
     const web3 = new Web3(window.ethereum)
     const privateKey =useRecoilValue(PkState)
     const account=useRecoilValue(AccountState)
-    const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
+   
 
     console.log(pk)
   
@@ -50,9 +50,15 @@ export default function CreateNft() {
   const NftCollectionContract = new HRC721(contractAddress,erc721V3xAbi,pk)
   
   const marketPlaceContract = new web3.eth.Contract(
+    marketPlaceAbi,
+   marketplace_contract_Address
+  )
+  
+  const collectionContract = new web3.eth.Contract(
    erc721V3xAbi,
    contractAddress
-)
+  )
+  
   const listNft=async()=>{
      const id =Number(tokenid)
      const itemPrice=Number(price)
@@ -60,18 +66,11 @@ export default function CreateNft() {
      toast("Processing: Listing NFT")
     try{
        
-       const tx = await NftMarketplaceContract.send("makeItem", [contractAddress,id,itemPrice],
-       {
-         gasPrice:new Unit("100").asGwei().toWei(),
-         gasLimit:3500000,
-         value: toWei(fee, 'one')
-       }
-      
-       )
+       const tx = await marketPlaceContract.methods.makeItem(contractAddress,id,itemPrice).send({from:account})
    
      console.log(tx,"ttttttttt")
      toast(`Transaction successful
-     Transaction Hash: ${tx.receipt?.transactionHash}
+     Transaction Hash: ${tx.transactionHash}
       `)
 
       const docRef = await addDoc(collection(db, "pools"), {
@@ -105,11 +104,11 @@ export default function CreateNft() {
     
     try{
       
-      const tx = await NftCollectionContract.send("mintNft", [account,amount],options )
+      const tx = await collectionContract.methods.mintNft(account,amount).send({from:account})
        
       console.log(tx,"ttttttttt")
       toast(`Transaction successful
-      Transaction Hash: ${tx.receipt?.transactionHash}
+      Transaction Hash: ${tx.transactionHash}
        `)
       }catch(e){
       console.log(e)
