@@ -49,7 +49,7 @@ export default function CreateStake() {
     
     console.log(tx,"ttttttttt")
     toast(`Transaction successful
-      Transaction Hash: ${tx.receipt?.transactionHash}
+      Transaction Hash: ${tx.transactionHash}
        `)
 
        setID("")
