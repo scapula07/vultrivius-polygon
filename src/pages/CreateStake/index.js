@@ -32,7 +32,7 @@ export default function CreateStake() {
      toast("Creating staking pool")
     try{
        
-      const tx = await  StakingContract.methods.startingTimer(timer)..send({from:account})
+      const tx = await  StakingContract.methods.startingTimer(timer).send({from:account})
 
       const docRef = await addDoc(collection(db, "pools"), {
         ID:Id,
