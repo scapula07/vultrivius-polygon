@@ -54,15 +54,7 @@ export default function StakeTable() {
        setTrigger(true)
       try{
        
-        const tx = await  StakingContract.call("totalEarnedReward", [],
-        {
-          gasPrice:new Unit("100").asGwei().toWei(),
-          gasLimit:3500000,
-         
-        }
-
-       
-        )
+        const tx = await  StakingContract.methods.totalEarnedReward().call()
       
         console.log(Number(tx))
         setEarnings([Number(tx)])
