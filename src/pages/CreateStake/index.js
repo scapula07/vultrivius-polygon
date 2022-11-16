@@ -21,25 +21,18 @@ export default function CreateStake() {
   const [time,setTime]=useState("")
   const [amount,setAmount]=useState("")
 
-
-  const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
-
-  console.log(pk)
-  const StakingContract = new HRC721(staking_contract_Address,stakingAbi,pk)
+    const StakingContract = new web3.eth.Contract(
+      stakingAbi,
+     staking_contract_Address 
+    )
   
+
   const Createpool=async()=>{
      const timer =Number(time)
      toast("Creating staking pool")
     try{
        
-      const tx = await  StakingContract.send("startingTimer", [timer],
-      {
-        gasPrice:new Unit("100").asGwei().toWei(),
-        gasLimit:3500000,
-       
-      }
-     
-      )
+      const tx = await  StakingContract.methods.startingTimer(timer)..send({from:account})
 
       const docRef = await addDoc(collection(db, "pools"), {
         ID:Id,
