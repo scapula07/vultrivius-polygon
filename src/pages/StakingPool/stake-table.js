@@ -25,10 +25,11 @@ export default function StakeTable() {
     const [join,setJoin] =useState(false)
     const [hasStake,setStaked] =useState(false)
     const [token,setToken]=useState("")
-    const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
-
-    console.log(pk)
-    const StakingContract = new HRC721(staking_contract_Address,stakingAbi,pk)
+ 
+      const StakingContract = new web3.eth.Contract(
+      stakingAbi,
+      staking_contract_Address 
+    )
     
     useEffect(()=>{
         const getStake=async()=>{
@@ -86,18 +87,12 @@ export default function StakeTable() {
           console.log("one")
           try{
        
-            const tx = await  StakingContract.send("stakeONE", [],
-            {
-              gasPrice:new Unit("100").asGwei().toWei(),
-              gasLimit:3500000,
-              value: toWei(stakeAmount, 'one')
-            }
-           
-            )
+            const tx = await StakingContract.methods.stakeONE().send({from:account})
+        
            
           console.log(tx,"ttttttttt")
           toast(`Transaction successful
-          Transaction Hash: ${tx.receipt?.transactionHash}
+          Transaction Hash: ${tx.transactionHash}
            `)
           setToken("")
           setStaked(true)
@@ -112,18 +107,12 @@ export default function StakeTable() {
          console.log(stakeV3t )
         try{
        
-            const tx = await StakingContract.send("stakeToken", [stakeV3t],
-            {
-              gasPrice:new Unit("100").asGwei().toWei(),
-              gasLimit:3500000,
-             
-            }
-           
-            )
+            const tx = await StakingContract.methods.stakeToken(stakeV3t).send({from:account})
+         
         
           console.log(tx,"ttttttttt")
           toast(`Transaction successful
-            Transaction Hash: ${tx.receipt?.transactionHash}
+            Transaction Hash: ${tx.transactionHash}
            `)
            setStaked(true)
            }catch(e){
@@ -142,18 +131,12 @@ export default function StakeTable() {
       
           try{
        
-            const tx = await  StakingContract.send("unStake", [],
-            {
-              gasPrice:new Unit("100").asGwei().toWei(),
-              gasLimit:3500000,
-            
-            }
-           
-            )
+            const tx = await  StakingContract.methods.unStake().send({from:account})
+          
            
           console.log(tx,"ttttttttt")
           toast(`Transaction successful
-          Transaction Hash: ${tx.receipt?.transactionHash}
+          Transaction Hash: ${tx.transactionHash}
            `)
           setToken("")
           setStaked(true)
