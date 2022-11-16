@@ -51,30 +51,22 @@ const NftVote = () => {
    },[])
 
    console.log(nftVoteData)
-
-  const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
-
-  console.log(pk)
-  const StakingContract = new HRC721(staking_contract_Address,stakingAbi,pk)
+  
+  const StakingContract = new web3.eth.Contract(
+      stakingAbi,
+     staking_contract_Address 
+    )
   
   const PurchaseNft=async()=>{
     toast("Processing Transactions")
     try{
        
-      const tx = await  StakingContract.send("purchaseNftItem", [collectionAddr,itemId],
-      {
-        gasPrice:new Unit("100").asGwei().toWei(),
-        gasLimit:3500000,
-       
-      }
-     
-      )
-
+      const tx = await  StakingContract.methods.purchaseNftItem(collectionAddr,itemId).send({from:account}),
     
     
     console.log(tx,"ttttttttt")
     toast(`Transaction successful
-      Transaction Hash: ${tx.receipt?.transactionHash}
+      Transaction Hash: ${tx.transactionHash}
        `)
 
     setItemID("")
@@ -92,34 +84,19 @@ const NftVote = () => {
     toast("Processing Transactions")
     try{
 
-      const txVrf = await  StakingContract.call("randomNum", [],
-      {
-        gasPrice:new Unit("100").asGwei().toWei(),
-        gasLimit:3500000,
-       
-      }
-
-     
-      )
+      const txVrf = await   StakingContract.methods.randomNum().send({from:account})
     
       console.log(Number(txVrf).toString().slice(0,1))
       const num=Number(txVrf).toString().slice(0,1)
       toast(`VRF Number: ${num}`)
        
-      const tx = await  StakingContract.send("transferNft", [nftAddress,TokenId],
-      {
-        gasPrice:new Unit("100").asGwei().toWei(),
-        gasLimit:3500000,
-       
-      }
-     
-      )
-
+      const tx = await StakingContract.methods.transferNft(nftAddress,TokenId).send({from:account})
+   
     
     
     console.log(tx,"ttttttttt")
     toast(`Transaction successful
-      Transaction Hash: ${tx.receipt?.transactionHash}
+      Transaction Hash: ${tx.transactionHash}
        `)
 
     setItemID("")
