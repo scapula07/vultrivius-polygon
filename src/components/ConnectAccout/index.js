@@ -3,7 +3,7 @@ import "./connect.css"
 import Modal from '../Modal'
 import {AiOutlineCloseCircle} from "react-icons/ai"
 import metamaskImg from "../../assests/metamask.png"
-import { connectHarmony } from '../../HarmonySdkHelpers'
+// import { connectHarmony } from '../../HarmonySdkHelpers'
 import { AccountState,  PkState} from '../../recoilstate/globalState'
 import { useRecoilState } from 'recoil'
 import Avater from "../../assests/profileAvater.png"
@@ -13,6 +13,7 @@ import Web3 from "web3";
 
 export default function ConnectAccount() {
     const [trigger,setTrigger] =useState(false)
+    const [Wallet, setWallet] = useState('otherWallets')
     const [privatek,setPk]=useRecoilState(PkState)
     const [account,setAccount]=useRecoilState(AccountState)   
     

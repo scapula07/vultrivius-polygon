@@ -5,9 +5,6 @@ import { useRecoilValue } from 'recoil';
 import { PkState } from '../../recoilstate/globalState';
 import Modal from '../Modal'
 
-const { Harmony } = require('@harmony-js/core');
-
-
 const SendFundsModal = ({ showSendFundsModal, setShowSendFundsModal, balance }) => {
     const initialFormData = {
         address: '',
@@ -18,28 +15,6 @@ const SendFundsModal = ({ showSendFundsModal, setShowSendFundsModal, balance }) 
     const privatek = useRecoilValue(PkState)
 
 
-
-    const {
-        ChainID,
-        ChainType,
-        hexToNumber,
-        numberToHex,
-        fromWei,
-        Units,
-        Unit,
-      } = require('@harmony-js/utils');
-      
-      const hmy = new Harmony(
-        'https://api.s0.b.hmny.io/',
-        {
-          chainType: ChainType.Harmony,
-          chainId: ChainID.HmyTestnet,
-        },
-      );
-      
-      hmy.wallet.addByPrivateKey(privatek);
-      console.log(privatek)
-
     const handleTextChange = (e) => {
         setFormData(prevState => ({
             ...prevState,
@@ -48,23 +23,7 @@ const SendFundsModal = ({ showSendFundsModal, setShowSendFundsModal, balance }) 
     }
 
     const  transfer = async(address,amount) => {
-        // console.log('amount',typeof amount)
-        const txn = hmy.transactions.newTx({
-          to: address,
-          value: new Unit(Number(amount)).asOne().toWei(),
-          // gas limit, you can use string
-          gasLimit: '21000',
-          // send token from shardID
-          shardID: 0,
-          // send token to toShardID
-          toShardID: 0,
-          // gas Price, you can use Unit class, and use Gwei, then remember to use toWei(), which will be transformed to BN
-          gasPrice: new hmy.utils.Unit('1').asGwei().toWei(),
-        });
-        // sign the transaction use wallet;
-        const signedTxn = await hmy.wallet.signTransaction(txn);
-        const txnHash = await hmy.blockchain.sendTransaction(signedTxn);
-        console.log(txnHash.result);
+
       }
       
     

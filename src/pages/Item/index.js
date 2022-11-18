@@ -8,8 +8,6 @@ import ellipse from "../../assests/Ellipse.png"
 import metadata from "../../assests/metadata.png"
 import ipfs from "../../assests/ipfs.png"
 import NftHistory from './nft-history';
-import { HttpProvider} from '@harmony-js/network'
-import { PrivateKey,HRC721  } from 'harmony-marketplace-sdk'
 import marketPlaceAbi from "../../ContractABI/marketplaceAbi.json"
 import { AccountState,PkState } from '../../recoilstate/globalState'
 import { useRecoilValue } from 'recoil'
@@ -20,7 +18,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import {AiOutlineCloseCircle } from "react-icons/ai"
 import Web3 from "web3";
 
-const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
 
 
@@ -32,9 +29,6 @@ export default function Item() {
     
    const privateKey =useRecoilValue(PkState)
    const account=useRecoilValue(AccountState)
-   const pk = new PrivateKey(new HttpProvider('https://api.s0.b.hmny.io'), privateKey,2)
-
-   console.log(pk)
  
     const location =useLocation()
     const [locationState,setlocationState] = useState(location.state)

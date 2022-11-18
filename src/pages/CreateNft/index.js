@@ -1,7 +1,5 @@
 import React ,{useState}from 'react'
 import FileUpload from './fileUpload'
-import { HttpProvider, WSProvider } from '@harmony-js/network'
-import { PrivateKey, HarmonyShards, HARMONY_RPC_SHARD_0_URL, HARMONY_RPC_WS,HRC721  } from 'harmony-marketplace-sdk'
 import marketPlaceAbi from "../../ContractABI/marketplaceAbi.json"
 import { useRecoilValue } from 'recoil'
 import "./createnft.css"
@@ -13,7 +11,6 @@ import {AiOutlineCloseCircle } from "react-icons/ai"
 import toast, { Toaster } from 'react-hot-toast';
 import { collection, setDoc,doc,getDoc,addDoc} from  'firebase/firestore'
 import { db } from '../../firebase';
-const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
 export const marketplace_contract_Address="0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
 export const collection_contract_Address="0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
@@ -22,11 +19,9 @@ export const collection_contract_Address="0xB3F83F090856e1cb7ae3c1fb4426757C6Cae
 export default function CreateNft() {
 
     const web3 = new Web3(window.ethereum)
-    const privateKey =useRecoilValue(PkState)
     const account=useRecoilValue(AccountState)
    
 
-    console.log(pk)
   
     const [fileImage, setFileImage] = useState({
       src: "",
@@ -42,12 +37,7 @@ export default function CreateNft() {
   const [supply,setSupply] =useState("")
   const [Royalty,setRoyalty] =useState("")
   const [ImgUrl,setImgUrl]=useState("")
-  const options={
-    gasPrice:new Unit("100").asGwei().toWei(),
-    gasLimit:3500000
-  }
-  const NftMarketplaceContract = new HRC721(marketplace_contract_Address,marketPlaceAbi,pk)
-  const NftCollectionContract = new HRC721(contractAddress,erc721V3xAbi,pk)
+  
   
   const marketPlaceContract = new web3.eth.Contract(
     marketPlaceAbi,

@@ -1,15 +1,12 @@
 import React ,{useState} from 'react'
 import Web3 from "web3";
 import stakingAbi from "../../ContractABI/stakingpoolAbi.json"
-import { HttpProvider, WSProvider } from '@harmony-js/network'
-import { PrivateKey, HarmonyShards, HARMONY_RPC_SHARD_0_URL, HARMONY_RPC_WS,HRC721  } from 'harmony-marketplace-sdk'
 import {AiOutlineCloseCircle } from "react-icons/ai"
 import { useRecoilValue } from 'recoil'
 import { AccountState,PkState } from '../../recoilstate/globalState'
 import toast, { Toaster } from 'react-hot-toast';
 import { collection, setDoc,doc,getDoc,addDoc} from  'firebase/firestore'
 import { db } from '../../firebase';
-const { Units, Unit ,toWei} = require('@harmony-js/utils');
 
 
 export const staking_contract_Address ="0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"
@@ -20,7 +17,8 @@ export default function CreateStake() {
   const [Id,setID]=useState("")
   const [time,setTime]=useState("")
   const [amount,setAmount]=useState("")
-
+  const { ethereum } = window;
+  const web3 = new Web3(ethereum)
     const StakingContract = new web3.eth.Contract(
       stakingAbi,
      staking_contract_Address 

@@ -2,8 +2,6 @@ import React, {useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import Modal from "../../components/Modal";
 import stakingAbi from "../../ContractABI/stakingpoolAbi.json"
-import { HttpProvider, WSProvider } from '@harmony-js/network'
-import { PrivateKey, HarmonyShards, HARMONY_RPC_SHARD_0_URL, HARMONY_RPC_WS,HRC721  } from 'harmony-marketplace-sdk'
 import {AiOutlineCloseCircle } from "react-icons/ai"
 import { useRecoilValue } from 'recoil'
 import { AccountState,PkState } from '../../recoilstate/globalState'
@@ -14,7 +12,8 @@ import { nftVoteData } from "../../utils/data/nft-vote.data";
 import view from "../../assests/goverance/view.svg";
 import { async } from "@firebase/util";
 import harmony from "../../assests/harmony.png"
-const { Units, Unit ,toWei} = require('@harmony-js/utils');
+import Web3 from "web3";
+
 
 export const staking_contract_Address ="0x1Ce0fD6bB86bB8F55aa5663b01D550fCB17099c9"
 
@@ -51,7 +50,8 @@ const NftVote = () => {
    },[])
 
    console.log(nftVoteData)
-  
+   const { ethereum } = window;
+   const web3 = new Web3(ethereum)
   const StakingContract = new web3.eth.Contract(
       stakingAbi,
      staking_contract_Address 
@@ -61,7 +61,7 @@ const NftVote = () => {
     toast("Processing Transactions")
     try{
        
-      const tx = await  StakingContract.methods.purchaseNftItem(collectionAddr,itemId).send({from:account}),
+      const tx = await  StakingContract.methods.purchaseNftItem(collectionAddr,itemId).send({from:account})
     
     
     console.log(tx,"ttttttttt")

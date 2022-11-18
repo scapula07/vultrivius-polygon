@@ -9,24 +9,6 @@ import AddFundsModal from "../../components/modals/add-funds-modal"
 import SendFundsModal from "../../components/modals/send-funds-modal";
 import { AccountState, PkState } from "../../recoilstate/globalState";
 
-const { Harmony } = require('@harmony-js/core');
-const {
-  ChainID,
-  ChainType,
-  hexToNumber,
-  numberToHex,
-  fromWei,
-  Units,
-  Unit,
-} = require('@harmony-js/utils');
-
-const hmy = new Harmony(
-  'https://api.s0.b.hmny.io/',
-  {
-    chainType: ChainType.Harmony,
-    chainId: ChainID.HmyTestnet,
-  },
-);
 
 export default function Wallet() {
   const account = useRecoilValue(AccountState)
@@ -63,17 +45,17 @@ export default function Wallet() {
   //     ChainID.HmyTestnet,
   //   ),
   // );
-  useEffect(() => {
-    if (account) {
-      hmy.blockchain
-      .getBalance({ address: account })
-      .then((response) => {
-        setBalance(fromWei(hexToNumber(response.result), Units.one))
-      });
-    }else{
-      toast.error('Wallet is not connected')
-    }
-  }, [account])
+  // useEffect(() => {
+  //   if (account) {
+  //     hmy.blockchain
+  //     .getBalance({ address: account })
+  //     .then((response) => {
+  //       setBalance(fromWei(hexToNumber(response.result), Units.one))
+  //     });
+  //   }else{
+  //     toast.error('Wallet is not connected')
+  //   }
+  // }, [account])
 
 
   return (
