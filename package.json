@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@maticnetwork/maticjs": "^3.5.0",
+    "@maticnetwork/maticjs-web3": "^1.0.2",
     "@metamask/detect-provider": "^2.0.0",
     "@react-three/drei": "^9.36.0",
     "@react-three/fiber": "^8.8.10",

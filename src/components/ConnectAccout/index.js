@@ -13,7 +13,7 @@ import Web3 from "web3";
 
 export default function ConnectAccount() {
     const [trigger,setTrigger] =useState(false)
-    const [Wallet, setWallet] = useState('otherWallets')
+    const [Wallet, setWallet] = useState('')
     const [privatek,setPk]=useRecoilState(PkState)
     const [account,setAccount]=useRecoilState(AccountState)   
     

@@ -1,4 +1,4 @@
-import React ,{useState} from 'react'
+import React ,{useState,useEffect} from 'react'
 import {FaEthereum} from "react-icons/fa"
 import harmony from "../../assests/harmony.png"
 import toast, { Toaster } from 'react-hot-toast';
@@ -8,252 +8,235 @@ import BridgeABI from "../../ContractABI/BridgeMintNft.json"
 import CustodyABI from "../../ContractABI/bridgeCustodialAbi.json"
 import Web3Modal from 'web3modal'
 import Web3 from 'web3'
+import { AccountState } from '../../recoilstate/globalState'
 // import axios from 'axios';
 import { useRecoilValue } from 'recoil'
-import { AccountState,PkState } from '../../recoilstate/globalState'
-import { harmonyChain,ethTest } from './ChainChange';
-import { ethNFT, ethCustody, ethrpc, harBridgeNFT, harCustody, harrpc,harNFT, bridgeWallet } from './configuration';
+import { POSClient,use,getPOSClient} from "@maticnetwork/maticjs"
+import { Web3ClientPlugin } from '@maticnetwork/maticjs-web3'
+import HDWalletProvider from "@truffle/hdwallet-provider"
+
 import detectEthereumProvider from '@metamask/detect-provider';
+
+
+use(Web3ClientPlugin);
+
 
 export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
 
 export default function Bridge() {
-    const privateKey =useRecoilValue(PkState)
+
     const account=useRecoilValue(AccountState)
-    const [sourceNft, getSourceNft] = useState([]);
-    const [sourceCustody, getSourceCustody] = useState([]);
-    const [selected, setSelected] = useState("Set Network");
     const [chain,setChain]=useState("")
-   
-  const [id, getId] = useState(0);
-  const [customPay, useToken] = React.useState(true);
-  const [nfts, setNfts] = useState([]);
-    const [sourceRpc, getSourceRpc] = useState([]);
-  const [confirmLink, getConfirmLink] = useState([]);
-  const [visible, setVisible] = React.useState(false);
-  const handler = () => setVisible(true);
-  const closeHandler = () => {
-    setVisible(false);
-    console.log("closed");
-  };
+    const [nfts,setNfts]= useState([])
+    const [desctChain,setDest]= useState("")
+    const [deposited,setDeposit] =useState(false)
+   const posClient = new POSClient();
 
-  const [erc20Contract, getErc20] = useState([]);
-  const [destselected, setDestSelected] = React.useState(new Set(["Set Destination"]));
-  const destChain = React.useMemo(() => Array.from(destselected).join(", ").replaceAll("_", " "),[selected])
+   const web3 = new Web3(window.ethereum)
   
-    var web3 = null;
-    async function sourceChain() {
-       
-        if (chain == "harmony") {
-            harmonyChain();
-            var sNft =  harBridgeNFT
-            var sCustody = harCustody
-      
+   useEffect(()=>{
+
+     const initPos= async()=>{
+
+      await posClient.init({
+        network: 'testnet',
+        version: 'mumbai',
+        parent: {
+          provider: window.ethereum,
+          defaultConfig: {
+            from :  account
+          }
+        },
+        child: {
+          provider: window.ethereum,
+          defaultConfig: {
+            from :  account
+          }
         }
-       
-        else {
-          ethTest();
-          var sNft = ethNFT
-          var sCustody = ethCustody
-        }
-       
-        getSourceNft(sNft);
-        getSourceCustody(sCustody);
+    });
+     }
+
+     initPos()
+    },[])
+           
+            
+    const retreiveNft= async()=>{
+
+      if (chain == "matic") {
+        console.log("matic")
+
+        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+
+        const CollectionContract = new web3.eth.Contract(
+          erc721V3xAbi ,
+          contractAddress 
+        )
+        const itemArray = [];
+       const value=  await CollectionContract.methods.walletOfOwner(account).call()
+          value.forEach(async(id) => {
+              let token = parseInt(id, 16)             
+                const rawUri = CollectionContract.methods.tokenURI(token).call()
+                const Uri = Promise.resolve(rawUri)
+                const getUri = Uri.then(value => {
+                  let str = value
+                  let cleanUri = str.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                  let metadata = fetch(cleanUri).catch(function (error) {
+                    console.log(error.toJSON());
+                  });
+                  return metadata;
+                })
+                getUri.then(value => {
+                  let rawImg = value.data.image
+                  var name = value.data.name
+                  var desc = value.data.description
+                  let image = rawImg.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                    let meta = {
+                      name: name,
+                      img: image,
+                      tokenId: token,
+                      wallet: account,
+                      desc
+                    }
+                    itemArray.push(meta)
+                  })
+                })
+                setNfts(itemArray)
+
+                console.log(itemArray,"items" )
+
+      }else{
+
+          
+        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+
+        const CollectionContract = new web3.eth.Contract(
+          erc721V3xAbi ,
+          contractAddress 
+        )
+
+        const itemArray = [];
+        const value=  await CollectionContract.methods.walletOfOwner(account).call()
+           value.forEach(async(id) => {
+               let token = parseInt(id, 16)             
+                 const rawUri = CollectionContract.methods.tokenURI(token).call()
+                 const Uri = Promise.resolve(rawUri)
+                 const getUri = Uri.then(value => {
+                   let str = value
+                   let cleanUri = str.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                   let metadata = fetch(cleanUri).catch(function (error) {
+                     console.log(error.toJSON());
+                   });
+
+                   console.log(metadata)
+                   return metadata;
+                 })
+                 getUri.then(value => {
+
+                  console.log(value,"value")
+                   let rawImg = value?.data?.image
+                   var name = value?.data?.name
+                   var desc = value?.data?.description
+                   let image = rawImg?.replace('ipfs://', 'https://ipfs.io/ipfs/')
+                     let meta = {
+                       name: name,
+                       img: image,
+                       tokenId: token,
+                       wallet: account,
+                       desc
+                     }
+                     itemArray.push(meta)
+                   })
+                 })
+                 setNfts(itemArray)
+ 
+                 console.log(itemArray,"items" )
+      }
+        
+
+    }
+
+    const approveNft= async () => {
       
+      if (chain == "matic") {
+        console.log("matic")
+
+        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+
+
+      const client = await getPOSClient();
+      const erc721RootToken = posClient.erc721(contractAddress,true);
+      const approveResult = await erc721RootToken.approve("");
+      const txHash = await approveResult.getTransactionHash();
+      const txReceipt = await approveResult.getReceipt();
+
+      }else{
+         
+        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+
+
+        const client = await getPOSClient();
+        const erc721RootToken = posClient.erc721(contractAddress,true);
+        const approveResult = await erc721RootToken.approve("");
+        const txHash = await approveResult.getTransactionHash();
+        const txReceipt = await approveResult.getReceipt();
+  
       }
+    }
 
-      async function setSource(){
-        const web3Modal = new Web3Modal();
-        var provider = await web3Modal.connect();
-        web3 = new Web3(provider);
+    const depositNft = async () => {
+      
 
-        var eth = "0x5";
-        var harmony = "1666700000";
-        const connected = await detectEthereumProvider();
+     if (chain == "matic") {
+        console.log("matic")
 
-        if (connected.chainId == eth) {
-            var sNft = ethNFT
-            var sCustody = ethCustody
-            var sRpc = ethrpc
-            // var erc20 = goeErc20
-          }
-          else {
-            var sNft =  harBridgeNFT
-            var sCustody = harCustody
-            var sRpc = harrpc
-            // var erc20 = mumErc20
-          }
-          const providerEther = new ethers.providers.JsonRpcProvider(sRpc)
-          const wallet = new ethers.Wallet(privateKey , providerEther );
-          const contract = new ethers.Contract(sNft, erc721V3xAbi , wallet);
-          const itemArray = [];
-          await contract.walletOfOwner(account).then((value => {
-            value.forEach(async(id) => {
-                let token = parseInt(id, 16)             
-                  const rawUri = contract.tokenURI(token)
-                  const Uri = Promise.resolve(rawUri)
-                  const getUri = Uri.then(value => {
-                    let str = value
-                    let cleanUri = str.replace('ipfs://', 'https://ipfs.io/ipfs/')
-                    let metadata = fetch(cleanUri).catch(function (error) {
-                      console.log(error.toJSON());
-                    });
-                    return metadata;
-                  })
-                  getUri.then(value => {
-                    let rawImg = value.data.image
-                    var name = value.data.name
-                    var desc = value.data.description
-                    let image = rawImg.replace('ipfs://', 'https://ipfs.io/ipfs/')
-                      let meta = {
-                        name: name,
-                        img: image,
-                        tokenId: token,
-                        wallet: account,
-                        desc
-                      }
-                      itemArray.push(meta)
-                    })
-                  })
-                  }))
+        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
 
-                  await new Promise(r => setTimeout(r, 2000));
-                  console.log("Wallet Refreshed : " + sRpc)
-                  getSourceNft(sNft);
-                  getSourceCustody(sCustody);
-                  getSourceRpc(sRpc);
-                  setNfts(itemArray);
+      const client = await getPOSClient();
+      const erc721RootToken = posClient.erc721("", true);
+      const result = await erc721RootToken.deposit("", account);
+      const txHash = await result.getTransactionHash();
+
+     }else{
+
+      const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+
+      const client = await getPOSClient();
+      const erc721RootToken = posClient.erc721("", true);
+      const result = await erc721RootToken.deposit("", account);
+      const txHash = await result.getTransactionHash();
+    
+
+     }
+    }
+
+    const burnWithdraw = async () => {
+
+      const maticContract="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+      const ethContract=""
+      if (desctChain == "matic") {
+        console.log("matic")
+      
+      const client = await getPOSClient();
+      const erc721Token = posClient.erc721(maticContract);
+      const result = await erc721Token.withdrawStart("");
+      const txHash = await result.getTransactionHash();
+
+      const erc721RootToken = posClient.erc721(ethContract, true);
+      const res= await erc721RootToken.withdrawExit(txHash);
+      const hash = await res.getTransactionHash();
+      }else{
+     
+      const client = await getPOSClient();
+      const erc721Token = posClient.erc721(ethContract);
+      const result = await erc721Token.withdrawStart("");
+      const txHash = await result.getTransactionHash();
+
+      const erc721RootToken = posClient.erc721(maticContract, true);
+      const res= await erc721RootToken.withdrawExit(txHash);
+      const hash = await res.getTransactionHash();
       }
-
-      async function initTransfer() {
-
-        if ("eth"== destChain) {
-            var dCustody = ethCustody;
-            var dRpc = ethrpc;
-            var dNFT = ethNFT;
-        } else  {
-            var dCustody = harCustody;
-            var dRpc = harrpc;
-           
-            var dNFT = harNFT;
-          }
-
-          const tokenId = id;
-          const web3Modal = new Web3Modal();
-          const connection = await web3Modal.connect();
-          const provider = new ethers.providers.Web3Provider(connection);
-          const signer = provider.getSigner();
-          const userWallet = await signer.getAddress();
-          const ethprovider = new ethers.providers.JsonRpcProvider(dRpc);
-          var wallet = new ethers.Wallet(privateKey, ethprovider);
-          const sNFTCol = new ethers.Contract(sourceNft, erc721V3xAbi, signer);
-        //   const tokenContract = new ethers.Contract(erc20Contract, Erc20ABI, signer);
-          const ethNFTCustody = new ethers.Contract(dCustody, CustodyABI, wallet);
-          const dNFTCont = new ethers.Contract(dNFT, BridgeABI, wallet);
-          handler();
-          await new Promise((r) => setTimeout(r, 1000));
-          toast('Initializing Transfer...')
-          let confirmHolder = await sNFTCol.ownerOf(tokenId);
-          let bridgeHolder = await dNFTCont.ownerOf(tokenId).catch(async (error)=> {
-            console.log('Bridge NFT not present, Standby...');
-            console.log('Bridge NFT Mint at Destination Processing');
-          });
-
-          await dNFTCont.ownerOf(tokenId).catch(async (error) => {
-            if (error) {
-                const rawTxn = await dNFTCont.populateTransaction.bridgeMint(
-                  bridgeWallet,
-                  tokenId);
-                let signedTxn = await wallet.sendTransaction(rawTxn);
-                await signedTxn.wait();
-                console.log("Bridge NFT Minted at Destination!")
-                const nftBridgeApprove = await dNFTCont.approve(dCustody, tokenId);
-                await nftBridgeApprove.wait();
-                console.log('Transferring NFT to Destination Bridge Custody');
-                let gas = { gasLimit: 3000000 };
-                const retaindNFT = await ethNFTCustody.retainNew(tokenId, gas);
-                await retaindNFT.wait();
-                console.log('NFT Successfully Transferred to Destination Custody!');
-                var hash = signedTxn.hash;
-                console.log("Confirmation TX: " + hash)
-                console.log('Verifications completed!, Starting Bridge Transfer...');
-            }
-            else if (bridgeHolder == bridgeWallet) {
-                toast('Confirming Bridge NFT at Destination Custody...');
-                const nftBridgeApprove = await dNFTCont.approve(dCustody, tokenId);
-                  const approveConfirm = await nftBridgeApprove.wait();
-                  console.log(approveConfirm);
-                  let gas = { gasLimit: 3000000 };
-                  const retaindNFT = await ethNFTCustody.retainNFTN(tokenId, gas);
-                  await retaindNFT.wait();
-                  toast('NFT Successfully Transferred to Destination Custody!');
-                  toast('Verifications completed!, Starting Bridge Transfer...');
-                }
-                else {
-                  console.log("Error submitting transaction");
-                }
-            })
-            if (confirmHolder == userWallet) {
-                let getHolder = await ethNFTCustody.holdCustody(tokenId);
-                let unListed = "0x0000000000000000000000000000000000000000";
-                if (confirmHolder == getHolder.holder) {
-                  console.log("User Confirmed, No Updates Needed");
-                } else if (getHolder.holder == unListed) {
-                  console.log("User Confirmed, No Updates Needed");
-                } else {
-                  let updOwner = await ethNFTCustody.updateOwner(tokenId, userWallet);
-                  let receipt = await updOwner.wait();
-                  if (receipt) {
-                    console.log("Holder Address Updated to: " + userWallet);
-                  } else {
-                    console.log("Error submitting transaction");
-                  }
-                }
-             }
-             toast("Verifying Details...")
-             await new Promise((r) => setTimeout(r, 4000));
-             toast("Verified, Bridge Initialized...")
-             await new Promise((r) => setTimeout(r, 4000));
-             toast("Please Approve NFT Transfer to Bridge.")
-             const sNFTCustody = new ethers.Contract(sourceCustody, CustodyABI, signer);
-             const tx1 = await sNFTCol.setApprovalForAll(sourceCustody, true);
-             await tx1.wait();
-             toast("Approval Received! Processing...")
-             await new Promise((r) => setTimeout(r, 4000));
-             toast("Please Execute NFT Transfer to Bridge.")
-
-           
-                const costNative = await sNFTCustody.costNative();
-                let options = { gasLimit: 3000000, value: costNative };
-                const tx3 = await sNFTCustody.retainNFTN(tokenId, options);
-                await tx3.wait();
-                toast("NFT has been transferred to Bridge!!" )
-                toast("In Transit to destination...") 
-                await new Promise((r) => setTimeout(r, 4000));
-
-                toast('Transferring to Destination Via: '+ dRpc);
-                let gas = { gasLimit: 3000000 };
-                let rawTxn = await ethNFTCustody.populateTransaction.releaseNFT(
-                  tokenId,
-                  userWallet,
-                  gas
-                );
-                let signedTxn = await wallet.sendTransaction(rawTxn);
-                let receipt = await signedTxn.wait();
-                if (receipt) {
-                
-              toast('Transfer has been completed!')
-               
-                //   var confirmOut4 =  explorer + signedTxn.hash
-                //   var confirmOut5 = 'Transaction Info'
-                  await new Promise((r) => setTimeout(r, 4000));
-                  
-                } else {
-                  console.log("Error submitting transaction");
-                }
-                // getConfirmLink(confirmOut4);
-                setSource();
-      }
+   
+    }
     
   return (
     <div className='pt-32 px-24'>
@@ -264,10 +247,10 @@ export default function Bridge() {
                     <h5 className='text-md font-semibold'>Source</h5>
 
                     <select name="cars" id="cars" className='text-lg  mt-2 text-slate-200 w-full outline-none text-center bg-black py-3 px-8 rounded-lg'
-                     onChange={(e)=>setChain(e.target.value)}
+                      onChange={(e)=>setChain(e.target.value)}
                     >
-                        <option value="one" className='outline-none'>
-                            Harmony
+                        <option value="matic" className='outline-none'>
+                            Polygon
                         </option>
                         <option value="eth" className='outline-none flex'>
                            Ethereum
@@ -278,7 +261,7 @@ export default function Bridge() {
 
                 <main className='pt-8 px-8'>
                     <button className='btn-color w-full text-black rounded-md font-semibold py-2 '
-                     onClick={setSource}
+                     onClick={retreiveNft}
                     >Retrieve Assets</button>
                 </main>
             </main>
@@ -291,6 +274,10 @@ export default function Bridge() {
                         return(
                            <div className="">
                              <img  src={nft.img}/>
+
+                             <button className='btn-color'
+                               onClick={approveNft}
+                             >Approve</button>
                            </div>
                         )
                     })}
@@ -306,10 +293,10 @@ export default function Bridge() {
                     <h5 className='text-md font-semibold'>Destination</h5>
 
                     <select name="cars" id="cars" className='text-lg  mt-2 text-slate-200 w-full outline-none text-center bg-black py-3 px-8 rounded-lg'
-                       onChange={(e)=>setDestSelected(e.target.value)}
+                        onChange={(e)=>desctChain(e.target.value)}
                     >
-                        <option value="one" className='outline-none'>
-                            Harmony
+                        <option value="matic" className='outline-none'>
+                            Polygon
                         </option>
                         <option value="eth" className='outline-none flex'>
                            Ethereum
@@ -329,13 +316,24 @@ export default function Bridge() {
                   
 
                 </div>
-
+                {deposited===false&&
                 <main className='pt-8'>
                     <button className='btn-color w-full text-black rounded-md font-semibold py-2'
-                        onClick={initTransfer}
-                    >Transfer</button>
+                        onClick={depositNft }
+                    >Deposit</button>
                 </main>
-            </main> 
+              }
+               
+               {deposited===true&&
+              <main className='pt-8'>
+              <button className='btn-color w-full text-black rounded-md font-semibold py-2'
+                  onClick={burnWithdraw}
+              >Withdraw NFT</button>
+          </main>
+             
+               }
+
+               </main>
         </div>
     </div>
   )  

@@ -21,8 +21,8 @@ import Web3 from "web3";
 
 
 
-export const marketplace_contract_Address="0x11f1eF9fcf19C74f3e05e0f3560e4875E7aa2489"
-export const collection_contract_Address="0xB3F83F090856e1cb7ae3c1fb4426757C6Caeed7a"
+export const marketplace_contract_Address="0x15F0a6F4095F2f04a187889F3D9b5a83c6b8D8E6"
+export const collection_contract_Address="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
 
 export default function Item() {
 
