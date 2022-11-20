@@ -2,6 +2,7 @@ import React ,{useState,useEffect} from 'react'
 import {FaEthereum} from "react-icons/fa"
 import harmony from "../../assests/harmony.png"
 import toast, { Toaster } from 'react-hot-toast';
+
 import { ethers } from 'ethers';
 import erc721V3xAbi from "../../ContractABI/v3xcollectionAbi.json"
 import BridgeABI from "../../ContractABI/BridgeMintNft.json"
@@ -30,6 +31,7 @@ export default function Bridge() {
     const [nfts,setNfts]= useState([])
     const [desctChain,setDest]= useState("")
     const [deposited,setDeposit] =useState(false)
+    const [tokenId,setID]=useState(0)
    const posClient = new POSClient();
 
    const web3 = new Web3(window.ethereum)
@@ -85,17 +87,18 @@ export default function Bridge() {
                   });
                   return metadata;
                 })
-                getUri.then(value => {
-                  let rawImg = value.data.image
-                  var name = value.data.name
-                  var desc = value.data.description
+                getUri.then(async value => {
+                  const data =await value.json()
+                  let rawImg = data.image
+                  
+                  var description= data?.description
                   let image = rawImg.replace('ipfs://', 'https://ipfs.io/ipfs/')
                     let meta = {
-                      name: name,
+                      
                       img: image,
                       tokenId: token,
                       wallet: account,
-                      desc
+                      description
                     }
                     itemArray.push(meta)
                   })
@@ -130,19 +133,18 @@ export default function Bridge() {
                    console.log(metadata)
                    return metadata;
                  })
-                 getUri.then(value => {
+                 getUri.then(async (value) => {
 
-                  console.log(value,"value")
-                   let rawImg = value?.data?.image
-                   var name = value?.data?.name
-                   var desc = value?.data?.description
+                  const data= await value.json()
+
+                   let rawImg = data?.image
+                   var description= data?.description
                    let image = rawImg?.replace('ipfs://', 'https://ipfs.io/ipfs/')
                      let meta = {
-                       name: name,
                        img: image,
                        tokenId: token,
                        wallet: account,
-                       desc
+                       description
                      }
                      itemArray.push(meta)
                    })
@@ -155,8 +157,8 @@ export default function Bridge() {
 
     }
 
-    const approveNft= async () => {
-      
+    const approveNft= async (id) => {
+      setID(id)
       if (chain == "matic") {
         console.log("matic")
 
@@ -165,9 +167,9 @@ export default function Bridge() {
 
       const client = await getPOSClient();
       const erc721RootToken = posClient.erc721(contractAddress,true);
-      const approveResult = await erc721RootToken.approve("");
+      const approveResult = await erc721RootToken.approve(id);
       const txHash = await approveResult.getTransactionHash();
-      const txReceipt = await approveResult.getReceipt();
+      toast(txHash);
 
       }else{
          
@@ -178,7 +180,7 @@ export default function Bridge() {
         const erc721RootToken = posClient.erc721(contractAddress,true);
         const approveResult = await erc721RootToken.approve("");
         const txHash = await approveResult.getTransactionHash();
-        const txReceipt = await approveResult.getReceipt();
+        toast(txHash);
   
       }
     }
@@ -192,24 +194,24 @@ export default function Bridge() {
         const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
 
       const client = await getPOSClient();
-      const erc721RootToken = posClient.erc721("", true);
-      const result = await erc721RootToken.deposit("", account);
+      const erc721RootToken = posClient.erc721(contractAddress, true);
+      const result = await erc721RootToken.deposit(tokenId, account);
       const txHash = await result.getTransactionHash();
-
+      toast(txHash);
      }else{
 
       const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
 
       const client = await getPOSClient();
-      const erc721RootToken = posClient.erc721("", true);
-      const result = await erc721RootToken.deposit("", account);
+      const erc721RootToken = posClient.erc721(contractAddress, true);
+      const result = await erc721RootToken.deposit(tokenId, account);
       const txHash = await result.getTransactionHash();
-    
+      toast(txHash);
 
      }
     }
 
-    const burnWithdraw = async () => {
+    const burnWithdraw = async (id) => {
 
       const maticContract="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
       const ethContract=""
@@ -218,24 +220,26 @@ export default function Bridge() {
       
       const client = await getPOSClient();
       const erc721Token = posClient.erc721(maticContract);
-      const result = await erc721Token.withdrawStart("");
+      const result = await erc721Token.withdrawStart(tokenId);
       const txHash = await result.getTransactionHash();
-
+      toast(txHash);
       const erc721RootToken = posClient.erc721(ethContract, true);
       const res= await erc721RootToken.withdrawExit(txHash);
       const hash = await res.getTransactionHash();
+      toast(hash);
       }else{
      
       const client = await getPOSClient();
       const erc721Token = posClient.erc721(ethContract);
-      const result = await erc721Token.withdrawStart("");
+      const result = await erc721Token.withdrawStart(tokenId);
       const txHash = await result.getTransactionHash();
-
+      toast(txHash);
       const erc721RootToken = posClient.erc721(maticContract, true);
       const res= await erc721RootToken.withdrawExit(txHash);
       const hash = await res.getTransactionHash();
+      toast(hash);
       }
-   
+      deposited(false)
     }
     
   return (
@@ -271,13 +275,18 @@ export default function Bridge() {
                 
                  <div className="mt-5 lg:mt-[33px] space-y-10 md:space-y-0 md:gap-5 lg:gap-6 md:grid grid-cols-2 lg:grid-cols-3">
                     {nfts.map((nft)=>{
+                      console.log(nft,"bbbbbb")
                         return(
-                           <div className="">
-                             <img  src={nft.img}/>
-
-                             <button className='btn-color'
-                               onClick={approveNft}
-                             >Approve</button>
+                           <div className="flex ">
+                            <main className='flex flex-col space-y-2'>
+                            <img  src={nft.img}/>
+                            <h5>Token ID: {nft.tokenId}</h5>
+                            <button className='btn-color flex justify-center text-black text-sm py-1 '
+                              onClick={approveNft(nft.tokenId)}
+                             >Approve</button> 
+  
+                            </main>
+                            
                            </div>
                         )
                     })}
