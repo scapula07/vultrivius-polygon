@@ -9,7 +9,7 @@ import { collection, setDoc,doc,getDoc,addDoc} from  'firebase/firestore'
 import { db } from '../../firebase';
 
 
-export const staking_contract_Address ="0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"
+export const staking_contract_Address ="0x42d36B4671b8eBd8D43326a45783D04888Ac0B6D"
 
 export default function CreateStake() {
   const privateKey =useRecoilValue(PkState)

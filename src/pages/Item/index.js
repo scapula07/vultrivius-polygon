@@ -3,7 +3,7 @@ import { useLocation,useParams} from "react-router-dom";
 import avater from "../../assests/male-avater.png"
 import viewIcon from  "../../assests/view-icon.png"
 import favorite from "../../assests/favorite.png"
-import harmony from "../../assests/harmony.png"
+import harmony from "../../assests/polygon.png"
 import ellipse from "../../assests/Ellipse.png"
 import metadata from "../../assests/metadata.png"
 import ipfs from "../../assests/ipfs.png"
@@ -20,9 +20,8 @@ import Web3 from "web3";
 
 
 
-
-export const marketplace_contract_Address="0x15F0a6F4095F2f04a187889F3D9b5a83c6b8D8E6"
-export const collection_contract_Address="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+export const marketplace_contract_Address="0x5E7019F60cEBD829C7612ABFcC1c717A21743818"
+export const collection_contract_Address="0xaBC2545899CfDe4f71A5b10A6DF5303eF97e41b3"
 
 export default function Item() {
 
@@ -33,7 +32,7 @@ export default function Item() {
     const location =useLocation()
     const [locationState,setlocationState] = useState(location.state)
     const [trigger,setTrigger] =useState(false)
-    const [purchase,setPurchased] =useState(true)
+    const [purchase,setPurchased] =useState(false)
     const [token,setToken]=useState("")
     
     const web3 = new Web3(window.ethereum)
@@ -177,7 +176,7 @@ export default function Item() {
                   <h5 className='flex flex-col text-xs'>
                      <span className='text-slate-400'>{locationState.item?.title}</span>
                      <span className='font-semibold'>{`${locationState.item?.title} #1`}</span>
-                     <span className='text-slate-400'>Royalty Fee :{"0.1 ONE"}</span>
+                     <span className='text-slate-400'>Royalty Fee :{"0.1 MATIC"}</span>
                   </h5>
                </div>
 
@@ -198,7 +197,7 @@ export default function Item() {
                <select name="cars" id="cars" className='text-xs text-slate-600 btn-color outline-none'
                  onChange={(e)=>setToken(e.target.value)}
                >
-                  <option value="one" className='stake-bg outline-none'>ONE</option>
+                  <option value="one" className='stake-bg outline-none'>MATIC</option>
                   <option value="v3t" className='stake-bg outline-none'>V3T</option>
                </select>  
             </button>

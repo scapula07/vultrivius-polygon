@@ -12,8 +12,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { collection, setDoc,doc,getDoc,addDoc} from  'firebase/firestore'
 import { db } from '../../firebase';
 
-export const marketplace_contract_Address="0x15F0a6F4095F2f04a187889F3D9b5a83c6b8D8E6"
-export const collection_contract_Address="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+export const marketplace_contract_Address="0x5E7019F60cEBD829C7612ABFcC1c717A21743818"
+export const collection_contract_Address="0xaBC2545899CfDe4f71A5b10A6DF5303eF97e41b3"
 
 
 export default function CreateNft() {
@@ -187,7 +187,7 @@ export default function CreateNft() {
              <label className="text-slate-400">Royalty Fee</label>
              <input 
                className='input-color py-2 text-slate-600 px-4 rounded-sm  outline-none' 
-                placeholder='Set Amount (ONE)'
+                placeholder='Set Amount (MATIC )'
 
              />
           </div>

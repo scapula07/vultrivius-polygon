@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom'
 import Web3 from "web3";
 
 
-export const staking_contract_Address = "0x122Fd2332E02E80A7AA765A87e0ABBDb07F1f56F"
+export const staking_contract_Address = "0x42d36B4671b8eBd8D43326a45783D04888Ac0B6D"
 
 export default function StakeTable() {
   const [pool, setPool] = useState([])
@@ -160,7 +160,7 @@ export default function StakeTable() {
                 <span className='text-sm font-semibold'>{`Pool#${pool?.ID}`}</span>
               </h5>
 
-              <h5 className=''>{pool?.totalstake} ONE</h5>
+              <h5 className=''>{pool?.totalstake} MATIC</h5>
               <h5 className='flex flex-col justify-center'>
                 <span className='font-semibold'>{pool.earnings}</span>
                 <span className='text-slate-400 text-xs'>0 USD</span>
@@ -194,7 +194,7 @@ export default function StakeTable() {
                   <div className='w-3/4'>
                     <h5 className='text-xs text-slate-400'>Pool rewards</h5>
                     <h5 className='flex flex-col'>
-                      <span className='text-xs  font-semibold'>{earings} ONE</span>
+                      <span className='text-xs  font-semibold'>{earings} MATIC</span>
                       <span className='text-xs  text-slate-400'>{earings * 0.0023} USD</span>
                     </h5>
                   </div>
@@ -230,7 +230,7 @@ export default function StakeTable() {
                           <select name="cars" id="cars" className='text-xs text-slate-600 btn-color outline-none'
                             onChange={(e) => setToken(e.target.value)}
                           >
-                            <option value="one" className='stake-bg outline-none'>ONE</option>
+                            <option value="one" className='stake-bg outline-none'>MATIC</option>
                             <option value="v3t" className='stake-bg outline-none'>V3T</option>
                           </select>
                         </button>

@@ -22,7 +22,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 use(Web3ClientPlugin);
 
 
-export const collection_contract_Address="0xd18B5123c38B01935b5cA8F5aBdB3a6C4898bdb5"
+export const collection_contract_Address="0xaBC2545899CfDe4f71A5b10A6DF5303eF97e41b3"
 
 export default function Bridge() {
 
@@ -67,7 +67,7 @@ export default function Bridge() {
       if (chain == "matic") {
         console.log("matic")
 
-        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+        const contractAddress ="0xaBC2545899CfDe4f71A5b10A6DF5303eF97e41b3"
 
         const CollectionContract = new web3.eth.Contract(
           erc721V3xAbi ,
@@ -110,7 +110,7 @@ export default function Bridge() {
       }else{
 
           
-        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+        const contractAddress ="0x05924C2C2e39Ec4Cff55b6Ff64C81A19cB84eDf3"
 
         const CollectionContract = new web3.eth.Contract(
           erc721V3xAbi ,
@@ -162,7 +162,7 @@ export default function Bridge() {
       if (chain == "matic") {
         console.log("matic")
 
-        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+        const contractAddress ="0xaBC2545899CfDe4f71A5b10A6DF5303eF97e41b3"
 
 
       const client = await getPOSClient();
@@ -173,7 +173,7 @@ export default function Bridge() {
 
       }else{
          
-        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+        const contractAddress ="0x05924C2C2e39Ec4Cff55b6Ff64C81A19cB84eDf3"
 
 
         const client = await getPOSClient();
@@ -191,7 +191,7 @@ export default function Bridge() {
      if (chain == "matic") {
         console.log("matic")
 
-        const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+        const contractAddress ="0xaBC2545899CfDe4f71A5b10A6DF5303eF97e41b3"
 
       const client = await getPOSClient();
       const erc721RootToken = posClient.erc721(contractAddress, true);
@@ -200,7 +200,7 @@ export default function Bridge() {
       toast(txHash);
      }else{
 
-      const contractAddress ="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
+      const contractAddress ="0x05924C2C2e39Ec4Cff55b6Ff64C81A19cB84eDf3"
 
       const client = await getPOSClient();
       const erc721RootToken = posClient.erc721(contractAddress, true);
@@ -213,8 +213,8 @@ export default function Bridge() {
 
     const burnWithdraw = async (id) => {
 
-      const maticContract="0x4FDB2ccbCDfea469934eaFDfEf235A6dD4C3fB57"
-      const ethContract=""
+      const maticContract="0xaBC2545899CfDe4f71A5b10A6DF5303eF97e41b3"
+      const ethContract="0x05924C2C2e39Ec4Cff55b6Ff64C81A19cB84eDf3"
       if (desctChain == "matic") {
         console.log("matic")
       

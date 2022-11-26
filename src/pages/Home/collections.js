@@ -1,7 +1,7 @@
 import React,{useState,useEffect}from 'react'
 import { collection, onSnapshot, doc,getDocs,query, orderBy, limit } from 'firebase/firestore'
 import { db } from '../../firebase'
-import Harmonyimg from "../../assests/harmony.png"
+import Harmonyimg from "../../assests/polygon.png"
 import Favorite from "../../assests/favorite.png"
 import { Link } from 'react-router-dom'
 export default function Collections() {
@@ -52,7 +52,7 @@ export default function Collections() {
                 <h1 className="text-[#95979F] capitalize text-sm md:text-base md:leading-[18px]">Price</h1>
                 <div className="flex items-center space-x-2">
                     <img src={Harmonyimg} className="h-3 w-3" alt="" />
-                    <p className="text-white">{item.price} ONE</p>
+                    <p className="text-white">{item.price} MATIC</p>
                 </div>
             </div>
         </div>

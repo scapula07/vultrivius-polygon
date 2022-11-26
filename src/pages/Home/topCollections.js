@@ -1,6 +1,6 @@
 import React from 'react'
 import { topCollectionData } from '../../utils/data/top-collection'
-import HarmonySymbolIcon from "../../assests/harmony.png"
+import HarmonySymbolIcon from "../../assests/polygon.png"
 export default function TopCollections() {
   return (
     <section className='layout-container mt-10 md:mt-[62px]'>
